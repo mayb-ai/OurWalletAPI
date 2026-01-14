@@ -61,5 +61,33 @@ Com a aplicação rodando, acesse o link abaixo para visualizar e testar os endp
     mvn spring-boot:run
     ```
 
+## 📅 Histórico de Atualizações
+
+### [13/01/2026] - Implementação de Regras de Negócio e Vínculos Inteligentes
+**Foco:** Refinamento das entidades `User` e `Family` com validações robustas e lógica de convites.
+
+- **Autenticação & Segurança de Dados:**
+  - Implementação de validações de entrada (Regex para E-mail, validação de formato de CPF).
+  - Sanitização de dados automática (remoção de espaços, padronização para minúsculas, limpeza de formatação de CPF).
+  - Regras de unicidade no banco de dados para CPF, E-mail e Username.
+- **Lógica de Família:**
+  - Criação do sistema de **Invite Code** (Geração automática de códigos de convite `FAM-XXXX` via `@PrePersist`).
+  - Implementação de fluxo para vincular usuários a famílias através do código de convite.
+  - Ajuste para suportar usuários sem família (relacionamento opcional).
+- **Arquitetura:**
+  - Uso de `@Transient` para manipulação de dados temporários no DTO de entrada.
+  - Refatoração do tratamento de exceções no Service Layer.
+
+### [11/01/2026] - Conclusão da Meta 1: Estrutura Base (MVP)
+**Foco:** Configuração inicial do ambiente e estruturação do Backend.
+
+- **Setup do Projeto:**
+  - Inicialização com Java 17 e Spring Boot 3.
+  - Configuração do Banco de Dados PostgreSQL e integração com Spring Data JPA.
+  - Configuração do **Swagger/OpenAPI** para documentação e testes dos endpoints.
+- **Entidades e Camadas:**
+  - Modelagem das entidades principais: `User`, `Family` e `Transaction`.
+  - Implementação do padrão arquitetural em camadas (Controller, Service, Repository).
+  - Criação dos primeiros endpoints CRUD para testes de integridade.
 ---
 Desenvolvido por **Maria Gabriela** 👩‍💻
