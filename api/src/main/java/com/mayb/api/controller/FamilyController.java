@@ -23,4 +23,10 @@ public class FamilyController {
     public List<Family> getAllFamilies() {
         return familyService.findAllFamilies();
     }
+
+    //Buscar pelo código (Ex: /families/invite/FAM-1234)
+    @GetMapping("/invite/{code}")
+    public Family getFamilyByCode(@PathVariable String code) {
+        return familyService.findByInviteCode(code);
+    }
 }
