@@ -63,6 +63,22 @@ Com a aplicação rodando, acesse o link abaixo para visualizar e testar os endp
 
 ## 📅 Histórico de Atualizações
 
+### [14/01/2026] - Implementação do Core Financeiro e Integração de Membros
+**Foco:** Desenvolvimento do fluxo de Transações e refinamento da associação de Usuários em Famílias.
+
+- **Gestão de Transações (Fluxo Financeiro):**
+  - Implementação completa do `TransactionService` com regras de negócio.
+  - **Validação de Valores:** Uso de `BigDecimal.compareTo` para garantir que apenas valores positivos sejam lançados.
+  - **Vínculo Inteligente:** Lógica para identificar automaticamente a Família do usuário no momento da compra e vincular a despesa ao grupo, garantindo consistência nos relatórios.
+  - **Prevenção de Efeitos Colaterais:** Tratamento cuidadoso de objetos gerenciados pelo Hibernate (`@Transactional`) para evitar alterações indesejadas na entidade User durante o lançamento de despesas.
+
+- **Gestão de Membros (Join Family):**
+  - Novo endpoint `POST /users/{id}/join-family`: Permite que usuários já cadastrados ("solitários") entrem em uma família existente utilizando o `inviteCode`.
+  - Tratamento de exceções com `orElseThrow` para códigos de convite inválidos.
+
+- **Melhorias Técnicas:**
+  - Refatoração para uso de Injeção de Dependência segura entre `TransactionService` e `UserRepository`.
+
 ### [13/01/2026] - Implementação de Regras de Negócio e Vínculos Inteligentes
 **Foco:** Refinamento das entidades `User` e `Family` com validações robustas e lógica de convites.
 
