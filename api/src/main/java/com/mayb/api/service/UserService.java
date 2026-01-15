@@ -3,11 +3,11 @@ package com.mayb.api.service;
 import com.mayb.api.entity.Family;
 import com.mayb.api.entity.User;
 import com.mayb.api.repository.UserRepository;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import com.mayb.api.repository.FamilyRepository;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -96,4 +96,22 @@ public class UserService {
         }
     }
 
+
+    // Metodo para usuário existente entrar na família
+    public User joinFamily(UUID userId, String inviteCode) {
+
+        // 1. Busca o usuário que já existe
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
+
+        // 2. Busca a família pelo código (FAM-XXXX)
+        Family family = familyRepository.findByInviteCode(inviteCode)
+                .orElseThrow(() -> new RuntimeException("Código de convite inválido!"));
+
+        // 3. Atualiza o vínculo
+        user.setFamily(family);
+
+        // 4. Salva a alteração
+        return userRepository.save(user);
+    }
 }
