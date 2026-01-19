@@ -1,6 +1,7 @@
 package com.mayb.api.service;
 
 import com.mayb.api.entity.Transaction;
+import com.mayb.api.entity.TransactionType;
 import com.mayb.api.entity.User;
 import com.mayb.api.repository.TransactionRepository;
 import com.mayb.api.repository.UserRepository;
@@ -10,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
+
+import com.mayb.api.dto.DashboardResponse;
 
 @Service
 public class TransactionService {
@@ -43,5 +47,29 @@ public class TransactionService {
 
     public List<Transaction> findAllTransactions() {
         return transactionRepository.findAll();
+    }
+
+    public DashboardResponse getDashboard(UUID userId){
+        // Busca todas as transações DESSE usuário
+        List<Transaction> transactions = transactionRepository.findAllByUserId(userId);
+
+        // Inicializa os totais com ZERO
+        BigDecimal income = BigDecimal.ZERO;
+        BigDecimal expense = BigDecimal.ZERO;
+
+
+        for(Transaction t : transactions){
+            if(t.getType() == TransactionType.INCOME){
+                income = income.add(t.getAmount());
+            } else {
+                expense = expense.add(t.getAmount());
+            }
+        }
+
+        // Calcula o Saldo (Receita - Despesa)
+        BigDecimal balance = income.subtract(expense);
+
+        // Retorna a caixinha pronta (DTO)
+        return new DashboardResponse(balance, income, expense);
     }
 }

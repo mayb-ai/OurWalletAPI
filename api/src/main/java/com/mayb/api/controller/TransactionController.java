@@ -4,8 +4,9 @@ import com.mayb.api.entity.Transaction;
 import com.mayb.api.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+import com.mayb.api.dto.DashboardResponse;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/transactions")
@@ -22,5 +23,10 @@ public class TransactionController {
     @GetMapping
     public List<Transaction> getAllTransactions() {
         return transactionService.findAllTransactions();
+    }
+
+    @GetMapping("/dashboard")
+    public DashboardResponse getDashboard(@RequestParam UUID userId){
+        return transactionService.getDashboard((userId));
     }
 }
