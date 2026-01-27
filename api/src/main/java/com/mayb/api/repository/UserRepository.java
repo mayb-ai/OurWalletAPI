@@ -16,4 +16,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     // Para o Login Futuro (Achar usuário por qualquer um dos meios)
     // Isso busca: Onde (email = X) OU (username = X) OU (cpf = X)
     Optional<User> findByEmailOrUsernameOrCpf(String email, String username, String cpf);
+
+    Optional<User> findByEmail(String email);
 }

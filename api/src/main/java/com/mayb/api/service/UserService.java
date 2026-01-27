@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import com.mayb.api.repository.FamilyRepository;
 import java.util.UUID;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class UserService {
@@ -16,6 +17,9 @@ public class UserService {
 
     @Autowired // <--- Injetamos o repositório da Família também!
     private FamilyRepository familyRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public User createUser(User user){
         // 1. Limpeza de dados (Remove espaços extras)
@@ -41,11 +45,10 @@ public class UserService {
             // A família vai ficar NULL no banco. Ele é um usuário "solteiro" por enquanto.
             user.setFamily(null);
         }
+        // CRIPTOGRAFA A SENHA ANTES DE SALVAR
+        String passwordCrypto = passwordEncoder.encode(user.getPassword());
+        user.setPassword(passwordCrypto);
 
-        // Se ele NÃO mandou código, ele fica sem família (family = null)
-        // e provavelmente vai criar uma nova depois.
-
-        // Se passou por tudo, salva!
         return userRepository.save(user);
     }
 
