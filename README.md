@@ -63,6 +63,27 @@ Com a aplicação rodando, acesse o link abaixo para visualizar e testar os endp
 
 ## 📅 Histórico de Atualizações
 
+### [27/01/2026] - Implementação de Segurança Completa (JWT) e Dashboard
+**Foco:** Blindagem da aplicação com Spring Security e Inteligência de Dados.
+
+- **🔐 Segurança e Autenticação (Core Security):**
+  - **Spring Security:** Configuração completa da `SecurityFilterChain`, definindo a política de "Zero Trust" (todas as rotas trancadas, exceto Login e Cadastro).
+  - **Criptografia de Senhas:** Implementação do algoritmo **BCrypt** (`PasswordEncoder`). Nenhuma senha é salva em texto puro no banco de dados.
+  - **Tokens JWT (JSON Web Token):**
+    - Integração com a biblioteca **Auth0** para geração e validação de tokens.
+    - Criação do `TokenService` para assinar tokens (HMAC256) com expiração automática.
+  - **Filtros de Requisição:** Implementação do `SecurityFilter` (via `OncePerRequestFilter`) para interceptar requisições HTTP, capturar o token no Header `Authorization` e autenticar o usuário antes de chegar ao Controller.
+  - **Endpoint de Login:** Criação da rota `POST /auth/login` que recebe credenciais e devolve o Token de acesso.
+
+- **📊 Inteligência de Negócio (Dashboard):**
+  - **Endpoint de Resumo:** Criação do `GET /transactions/dashboard`.
+  - **Cálculo em Tempo Real:** Lógica implementada no Service para agregar receitas e despesas e calcular o saldo final dinamicamente.
+  - **DTOs Específicos:** Uso de Records (`DashboardResponse`, `LoginRequest`, `LoginResponse`) para transferência de dados limpa e eficiente.
+
+- **🛠️ Infraestrutura e Correções:**
+  - Ajuste de credenciais de banco de dados no `application.properties` para conexão estável com PostgreSQL.
+  - Configuração de CORS e CSRF para compatibilidade com clientes REST (Postman/Front-end).
+
 ### [14/01/2026] - Implementação do Core Financeiro e Integração de Membros
 **Foco:** Desenvolvimento do fluxo de Transações e refinamento da associação de Usuários em Famílias.
 
