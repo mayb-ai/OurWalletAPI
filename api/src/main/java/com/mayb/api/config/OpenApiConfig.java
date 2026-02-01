@@ -13,9 +13,11 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("OurWallet API") // Título
+                        .title("OurWallet API") // Título personalizado
                         .description("API de Controle Financeiro Familiar - Desenvolvida por Maria Gabriela") // Descrição
-                        .contact(new Contact().name("Maria Gabriela").email("maria@email.com")) // Seus dados
-                        .version("1.0.0")); // Versão
+                        .contact(new Contact()
+                                .name("Maria Gabriela")
+                                .email("mg8355627@gmail.com")) // Seus dados de contato
+                        .version("1.0.0")); // Versão da API
     }
 }

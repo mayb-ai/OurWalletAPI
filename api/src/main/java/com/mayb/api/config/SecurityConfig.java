@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll() // Login é público
                         .requestMatchers(HttpMethod.POST, "/users").permitAll()      // Criar conta é público
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // Swagger livre (opcional)
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll() // Swagger livre (opcional)
                         .anyRequest().authenticated() // <--- O RESTO É TUDO TRANCADO!
                 )
                 // Adiciona nosso filtro ANTES do filtro padrão do Spring
