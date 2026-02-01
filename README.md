@@ -5,11 +5,12 @@ O sistema permite o gerenciamento de despesas e receitas de forma colaborativa, 
 
 ## 🚀 Tecnologias Utilizadas
 
-- **Java 17**
-- **Spring Boot 3** (Web, Data JPA, Validation)
+- **Java 17+** (Compatível com JDK 24)
+- **Spring Boot 4** (Web, Data JPA, Validation, Security)
 - **PostgreSQL** (Banco de Dados Relacional)
-- **SpringDoc OpenAPI / Swagger** (Documentação Automática)
-- **Lombok** (Redução de boilerplate code)
+- **SpringDoc OpenAPI / Swagger** (v2.8.3 - Documentação Automática)
+- **Auth0 java-jwt** (Geração e Validação de Tokens)
+- **Lombok** (Produtividade e redução de boilerplate)
 - **Maven** (Gerenciamento de dependências)
 
 ## 🏗️ Arquitetura do Projeto
