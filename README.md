@@ -86,8 +86,9 @@ Com a aplicação rodando, acesse o link abaixo para visualizar e testar os endp
 
 - **🔒 Privacidade e Funcionalidades:**
   - **Privacidade:** Usuários agora visualizam apenas suas próprias transações (`findAllByUserId`), impedindo vazamento de dados entre contas.
-  - **Exclusão:** Implementação da rota `DELETE /transactions/{id}` para correção de lançamentos.
+  - **CRUD Completo:** Implementação das rotas de Edição (PUT) e Exclusão (DELETE) para transações.
   - Limpeza de código no `UserService`, removendo validações manuais redundantes.
+  
 
 ### [27/01/2026] - Implementação de Segurança Completa (JWT) e Dashboard
 **Foco:** Blindagem da aplicação com Spring Security e Inteligência de Dados.
