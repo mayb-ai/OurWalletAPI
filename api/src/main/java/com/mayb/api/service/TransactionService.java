@@ -45,31 +45,29 @@ public class TransactionService {
         return transactionRepository.save(transaction);
     }
 
-    public List<Transaction> findAllTransactions() {
-        return transactionRepository.findAll();
+    public List<Transaction> findAllTransactions(UUID userId) {
+        return transactionRepository.findAllByUserId(userId);
     }
 
     public DashboardResponse getDashboard(UUID userId){
-        // Busca todas as transações DESSE usuário
-        List<Transaction> transactions = transactionRepository.findAllByUserId(userId);
+        // Pede a soma das RECEITAS direto pro banco
+        BigDecimal income = transactionRepository.calculateTotal(userId, TransactionType.INCOME);
 
-        // Inicializa os totais com ZERO
-        BigDecimal income = BigDecimal.ZERO;
-        BigDecimal expense = BigDecimal.ZERO;
+        // Pede a soma das DESPESAS direto pro banco
+        BigDecimal expense = transactionRepository.calculateTotal(userId, TransactionType.EXPENSE);
 
-
-        for(Transaction t : transactions){
-            if(t.getType() == TransactionType.INCOME){
-                income = income.add(t.getAmount());
-            } else {
-                expense = expense.add(t.getAmount());
-            }
-        }
-
-        // Calcula o Saldo (Receita - Despesa)
+        // Faz a subtração simples aqui
         BigDecimal balance = income.subtract(expense);
 
         // Retorna a caixinha pronta (DTO)
         return new DashboardResponse(balance, income, expense);
+    }
+
+    public void deleteTransaction(UUID id){
+        //vê se existe
+        Transaction transaction = transactionRepository.findById(id).orElseThrow(()-> new RuntimeException("Transação não encontrada."));
+
+        //apaga do banco
+        transactionRepository.delete(transaction);
     }
 }

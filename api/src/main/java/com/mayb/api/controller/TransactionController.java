@@ -3,6 +3,7 @@ package com.mayb.api.controller;
 import com.mayb.api.entity.Transaction;
 import com.mayb.api.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.mayb.api.dto.DashboardResponse;
 import java.util.List;
@@ -21,12 +22,19 @@ public class TransactionController {
     }
 
     @GetMapping
-    public List<Transaction> getAllTransactions() {
-        return transactionService.findAllTransactions();
+    public List<Transaction> getAllTransactions(@RequestParam UUID userId) {
+        return transactionService.findAllTransactions(userId);
     }
 
     @GetMapping("/dashboard")
     public DashboardResponse getDashboard(@RequestParam UUID userId){
         return transactionService.getDashboard((userId));
+    }
+
+    public ResponseEntity<Void> deleteTransaction(@PathVariable UUID id){
+        transactionService.deleteTransaction(id);
+
+        // Retorna status 204 (Sucesso, mas sem conteúdo para mostrar)
+        return ResponseEntity.noContent().build();
     }
 }

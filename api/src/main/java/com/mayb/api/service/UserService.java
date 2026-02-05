@@ -22,13 +22,10 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     public User createUser(User user){
-        // 1. Limpeza de dados (Remove espaços extras)
+        // Limpeza de dados (Remove espaços extras)
         sanitizeUser(user);
 
-        // 2. Validações de Formato (Regex)
-        validateFormat(user);
-
-        // 3. Validação de Duplicidade (Regra de Negócio)
+        // Validação de Duplicidade (Regra de Negócio)
         validateUniqueness(user);
 
         // Se o usuário mandou um código de convite...
@@ -70,22 +67,6 @@ public class UserService {
         if (user.getCpf() != null) user.setCpf(user.getCpf().replaceAll("\\D", ""));
     }
 
-    private void validateFormat(User user) {
-        // Valida CPF (apenas verifica se tem 11 dígitos por enquanto)
-        if (user.getCpf() == null || user.getCpf().length() != 11) {
-            throw new RuntimeException("Erro: CPF inválido. Deve conter 11 dígitos.");
-        }
-
-        // Valida E-mail com Regex simples
-        if (user.getEmail() == null || !user.getEmail().matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            throw new RuntimeException("Erro: E-mail inválido.");
-        }
-
-        // Valida Senha (Mínimo 6 caracteres)
-        if (user.getPassword() == null || user.getPassword().length() < 6) {
-            throw new RuntimeException("Erro: A senha deve ter no mínimo 6 caracteres.");
-        }
-    }
 
     private void validateUniqueness(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
