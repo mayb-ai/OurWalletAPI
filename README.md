@@ -1,26 +1,28 @@
 # 💰 OurWallet API
 
 API REST para controle financeiro familiar, desenvolvida com **Java** e **Spring Boot**.
-O sistema permite o gerenciamento de despesas e receitas de forma colaborativa, onde transações são vinculadas a usuários e famílias, garantindo a integridade dos dados e regras de negócio.
+O sistema permite o gerenciamento seguro de despesas e receitas, com foco em integridade de dados, segurança (JWT) e alta performance.
 
 ## 🚀 Tecnologias Utilizadas
 
 - **Java 17+** (Compatível com JDK 24)
-- **Spring Boot 4** (Web, Data JPA, Validation, Security)
+- **Spring Boot 3** (Web, Data JPA, Validation, Security)
 - **PostgreSQL** (Banco de Dados Relacional)
 - **SpringDoc OpenAPI / Swagger** (v2.8.3 - Documentação Automática)
 - **Auth0 java-jwt** (Geração e Validação de Tokens)
+- **Jakarta Validation** (Blindagem e validação de dados de entrada)
 - **Lombok** (Produtividade e redução de boilerplate)
 - **Maven** (Gerenciamento de dependências)
 
 ## 🏗️ Arquitetura do Projeto
 
-O projeto foi estruturado seguindo a **Arquitetura em Camadas (Layered Architecture)** para garantir a separação de responsabilidades, escalabilidade e manutenibilidade:
+O projeto segue a **Arquitetura em Camadas (Layered Architecture)** para garantir a separação de responsabilidades, escalabilidade e manutenibilidade:
 
-* **Controller:** Camada responsável pela exposição dos endpoints REST e comunicação HTTP. ("Recepcionista")
-* **Service:** Camada responsável pelas regras de negócio e validações. ("Gerente")
-* **Repository:** Camada responsável pela persistência e comunicação direta com o banco de dados. ("Estoquista")
-* **Entity:** Mapeamento objeto-relacional (ORM) das tabelas do banco.
+* **Controller:** Exposição dos endpoints REST, validação de requisições (`@Valid`) e comunicação HTTP. ("Recepcionista")
+* **Service:** Regras de negócio, cálculos financeiros e fluxo de dados. ("Gerente")
+* **Repository:** Persistência e consultas otimizadas ao banco de dados (`@Query`). ("Estoquista")
+* **DTO (Data Transfer Object):** Objetos específicos para entrada de dados, garantindo segurança e filtragem de campos sensíveis.
+* **Security/Config:** Configurações de segurança, filtros JWT e tratamento global de erros.
 
 ## 🔌 Documentação (Swagger UI)
 
@@ -29,24 +31,30 @@ Com a aplicação rodando, acesse o link abaixo para visualizar e testar os endp
 
 📍 **Acesse:** `http://localhost:8080/swagger-ui/index.html`
 
+> **Nota:** Para testar rotas protegidas, faça login em `/auth/login`, copie o token e use o botão **Authorize** no topo da página.
+
 ### Endpoints Principais:
-* **Families** (`/families`): Criação e listagem de grupos familiares.
-* **Users** (`/users`): Cadastro de usuários vinculados a uma família.
-* **Transactions** (`/transactions`): Registro de despesas (`EXPENSE`) e receitas (`INCOME`) com vínculo de usuário/família.
+* **Families** (`/families`): Gestão de grupos familiares e convites.
+* **Users** (`/users`): Cadastro blindado de usuários e entrada em famílias.
+* **Transactions** (`/transactions`): 
+  - Criação de receitas/despesas.
+  - Listagem segura (apenas dados do próprio usuário).
+  - Exclusão de lançamentos.
+  - **Dashboard:** Saldo em tempo real.
 
 ## 🛠️ Como Executar o Projeto
 
 ### Pré-requisitos
-* Java 17 JDK instalado.
+* Java 17 ou superior instalado.
 * PostgreSQL instalado e rodando.
 * Maven instalado.
 
 ### Passo a Passo
 
-1.  **Clone o repositório:**
-    ```bash
-    git clone [https://github.com/mayb-ai/OurWallet.git](https://github.com/mayb-ai/OurWallet.git)
-    ```
+1. **Clone o repositório:**
+   ```bash
+   git clone [https://github.com/mayb-ai/OurWallet.git](https://github.com/mayb-ai/OurWallet.git)
+   ````
 
 2.  **Configure o Banco de Dados:**
     Abra o arquivo `src/main/resources/application.properties` e configure suas credenciais do PostgreSQL:
@@ -63,6 +71,23 @@ Com a aplicação rodando, acesse o link abaixo para visualizar e testar os endp
     ```
 
 ## 📅 Histórico de Atualizações
+
+### [05/02/2026] - Segurança Avançada, Validação e Performance
+**Foco:** Profissionalização da arquitetura, validação de dados e otimização de banco.
+
+- **🛡️ Blindagem de Dados (Bean Validation):**
+  - Implementação do padrão **DTO** (`UserCreateRequest`) para cadastro, isolando a entidade do banco.
+  - Uso de anotações **Jakarta** (`@NotBlank`, `@Email`, `@Size`, `@CPF`) para impedir cadastro de dados inválidos.
+  - Refatoração do `UserController` para instanciar objetos por requisição, corrigindo problemas de concorrência (Singleton).
+
+- **⚡ Performance e SQL:**
+  - Otimização do **Dashboard**: Substituição do cálculo em memória (Java) por **Queries Nativas** no Banco de Dados (`SUM` e `COALESCE`).
+  - **Resultado:** O saldo é calculado instantaneamente pelo PostgreSQL, sem carregar listas gigantes na memória.
+
+- **🔒 Privacidade e Funcionalidades:**
+  - **Privacidade:** Usuários agora visualizam apenas suas próprias transações (`findAllByUserId`), impedindo vazamento de dados entre contas.
+  - **Exclusão:** Implementação da rota `DELETE /transactions/{id}` para correção de lançamentos.
+  - Limpeza de código no `UserService`, removendo validações manuais redundantes.
 
 ### [27/01/2026] - Implementação de Segurança Completa (JWT) e Dashboard
 **Foco:** Blindagem da aplicação com Spring Security e Inteligência de Dados.
