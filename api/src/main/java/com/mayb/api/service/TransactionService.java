@@ -45,6 +45,18 @@ public class TransactionService {
         return transactionRepository.save(transaction);
     }
 
+    public Transaction updateTransaction(UUID id, Transaction transactionUpdated){
+        Transaction transactionCurrent = transactionRepository.findById(id).orElseThrow(() -> new RuntimeException("Transação não encontrada"));
+
+        transactionCurrent.setDescription(transactionUpdated.getDescription());
+        transactionCurrent.setAmount(transactionUpdated.getAmount());
+        transactionCurrent.setType(transactionUpdated.getType());
+        transactionCurrent.setCategory(transactionUpdated.getCategory());
+        transactionCurrent.setDate(transactionUpdated.getDate());
+
+        return transactionRepository.save(transactionCurrent);
+    }
+
     public List<Transaction> findAllTransactions(UUID userId) {
         return transactionRepository.findAllByUserId(userId);
     }

@@ -37,4 +37,9 @@ public class TransactionController {
         // Retorna status 204 (Sucesso, mas sem conteúdo para mostrar)
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{id}")
+    public Transaction updateTransaction(@PathVariable UUID id, @RequestBody Transaction transaction){
+        return transactionService.updateTransaction(id, transaction);
+    }
 }
